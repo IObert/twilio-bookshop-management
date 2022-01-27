@@ -50,7 +50,7 @@ class CatalogService extends cds.ApplicationService {
         const lastOrderPattern = /(\d+)x/;
         const titlePattern = /"(.*?)"/;
 
-        const restock = +payload.match(restockPattern)[0];
+        const restock = payload.match(restockPattern) ? +payload.match(restockPattern)[0] : undefined;
         const lastOrder = +lastMessage.match(lastOrderPattern)[1];
         const title = lastMessage.match(titlePattern)[1];
         const books = await SELECT.from(Books).where({ title });
