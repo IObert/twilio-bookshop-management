@@ -7,13 +7,15 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^5",
-    "express": "^4"
+    "express": "^4",
+    "twilio": "^3.73.1"
   },
   "devDependencies": {
+    "@sap/cds-dk": "^4.7.3",
     "sqlite3": "^5.0.2"
   },
   "scripts": {
-    "start": "cds run"
+    "start": "cds watch --in-memory"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
