@@ -1,0 +1,31 @@
+### Get stock data from catalog
+GET http://localhost:4004/catalog/Books
+
+### Order a small quantity of a book with much supply
+POST http://localhost:4004/catalog/submitOrder HTTP/1.1
+Content-Type:  application/json
+
+{
+    "book": "28040e66-1dcd-4ffb-ab10-fdce32028b79",
+    "quantity": 5
+}
+
+### Order a medium quantity of a book with low supply
+POST http://localhost:4004/catalog/submitOrder HTTP/1.1
+Content-Type:  application/json
+
+{
+    "book": "38040e66-1dcd-4ffb-ab10-fdce32028b79",
+    "quantity": 40
+}
+
+### Order a large quantity of a book with low supply
+POST http://localhost:4004/catalog/submitOrder HTTP/1.1
+Content-Type:  application/json
+
+{
+    "book": "38040e66-1dcd-4ffb-ab10-fdce32028b79",
+    "quantity": 50
+}
+
+
