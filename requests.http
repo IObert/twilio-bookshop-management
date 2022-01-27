@@ -28,4 +28,30 @@ Content-Type:  application/json
     "quantity": 50
 }
 
+### Test endpoint to restock books
+POST http://localhost:4004/catalog/restock HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
 
+{   
+    "ToCountry": "DE",
+    "ToState": "",
+    "SmsMessageSid": "SM95f8b5efe20b63323983a3259b4de777",
+    "NumMedia": "0",
+    "ToCity": "",
+    "FromZip": "",
+    "SmsSid": "SM95f8b5efe20b63323983a3259b4de777",
+    "FromState": "",
+    "SmsStatus": "received",
+    "FromCity": "",
+    "Body": "Yes 522.1",
+    "FromCountry": "DE",
+    "To": "+4915735980600",
+    "MessagingServiceSid": "MG4521aed521fb1dbd7384be2804821757",
+    "ToZip": "",
+    "AddOns": "{'status':'successful','message':null,'code':null,'results':{}}",
+    "NumSegments": "1",
+    "MessageSid": "SM95f8b5efe20b63323983a3259b4de777",
+    "AccountSid": "AC4cf658174d2bbdea742d8bffac453bbb",
+    "From": "+4915161873292",
+    "ApiVersion": "2010-04-01"
+}

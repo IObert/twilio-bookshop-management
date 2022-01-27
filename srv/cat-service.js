@@ -1,5 +1,8 @@
 const cds = require("@sap/cds");
-const twilioClient = require("twilio")();
+const twilio = require("twilio");
+
+const twilioClient = twilio();
+const MessagingResponse = twilio.twiml.MessagingResponse;
 
 class CatalogService extends cds.ApplicationService {
   init() {
@@ -14,19 +17,61 @@ class CatalogService extends cds.ApplicationService {
         return req.reject(409, `${quantity} exceeds stock for book #${book}`);
       }
       if (remaining < 10) {
-        console.log(`A customer just ordered ${stock}x "${title}".`);
         twilioClient.messages
           .create({
-            body: `A customer just ordered ${stock}x "${title}" and there are only ${remaining} left in stock.`,
+            body: `A customer just ordered ${stock}x "${title}" and there are only ${remaining} left in stock. Please respond with "Yes" if you would like to restock now.`,
             from: process.env.TWILIO_SENDER,
             to: process.env.TWILIO_RECEIVER,
           })
-          .then((message) => console.log(message.sid))
+          .then((message) =>
+            console.log(`Message ${message.sid} has been delivered.`)
+          )
           .catch((message) => console.error(message));
       }
       await UPDATE(Books, book).with({ stock: remaining });
-      await this.emit("OrderedBook", { book, quantity, buyer: req.user.id });
-      return { stock };
+      return { ID: book, stock: remaining };
+    });
+
+    // Restock books that are low on supply
+    this.on("restock", async (req) => {
+      // retrieve sender and payload from incoming message
+      const sender = req.data.From,
+        payload = req.data.Body;
+      // get last message that was sent to that number
+      const lastMessages = await twilioClient.messages.list({
+        limit: 1,
+        from: process.env.TWILIO_SENDER,
+        to: sender,
+      });
+      const lastMessage = lastMessages[0]?.body;
+
+      if (payload.includes("Yes") && lastMessage) {
+        const restockPattern = /\d+/;
+        const lastOrderPattern = /(\d+)x/;
+        const titlePattern = /"(.*?)"/;
+
+        const restock = +payload.match(restockPattern)[0];
+        const lastOrder = +lastMessage.match(lastOrderPattern)[1];
+        const title = lastMessage.match(titlePattern)[1];
+        const books = await SELECT.from(Books).where({ title });
+        if (books[0] && books[0].ID && books[0].stock) {
+          const newStock = books[0].stock + (restock || lastOrder);
+          await UPDATE(Books, books[0].ID).with({
+            stock: newStock,
+          });
+
+          const twiml = new MessagingResponse();
+          req.res.writeHead(200, { "Content-Type": "text/xml" });
+          twiml.message(`The item has been restocked to ${newStock} :) .`);
+          req.res.end(twiml.toString());
+          return;
+        }
+      }
+
+      const twiml = new MessagingResponse();
+      req.res.writeHead(200, { "Content-Type": "text/xml" });
+      twiml.message("Oh no. Something went wrong :( .");
+      req.res.end(twiml.toString());
     });
 
     return super.init();
