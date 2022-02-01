@@ -1,4 +1,4 @@
-# Mobile Bookshop Management
+# Twilio Bookshop Management
 CAP Bookshop x Twilio Messaging
 
 > This sample project demonstrates how to combine the [Twilio Messaging API](https://www.twilio.com/messaging) with an application built with the [SAP Cloud Application Programming Model](https://cap.cloud.sap/docs/).
