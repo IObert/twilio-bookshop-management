@@ -35,8 +35,8 @@ class CatalogService extends cds.ApplicationService {
     // Restock books that are low on supply
     this.on("restock", async (req) => {
       // retrieve sender and payload from incoming message
-      const sender = req.data.From,
-        payload = req.data.Body;
+      const sender = req.data.from,
+        payload = req.data.body;
       // get last message that was sent to that number
       const lastMessages = await twilioClient.messages.list({
         limit: 1,
@@ -50,7 +50,9 @@ class CatalogService extends cds.ApplicationService {
         const lastOrderPattern = /(\d+)x/;
         const titlePattern = /"(.*?)"/;
 
-        const restock = payload.match(restockPattern) ? +payload.match(restockPattern)[0] : undefined;
+        const restock = payload.match(restockPattern)
+          ? +payload.match(restockPattern)[0]
+          : undefined;
         const lastOrder = +lastMessage.match(lastOrderPattern)[1];
         const title = lastMessage.match(titlePattern)[1];
         const books = await SELECT.from(Books).where({ title });
@@ -60,10 +62,12 @@ class CatalogService extends cds.ApplicationService {
             stock: newStock,
           });
 
-          const twiml = new MessagingResponse();
-          req.res.writeHead(200, { "Content-Type": "text/xml" });
-          twiml.message(`The item has been restocked to ${newStock} :) .`);
-          req.res.end(twiml.toString());
+          // const twiml = new MessagingResponse();
+          // req.res.writeHead(200, { "Content-Type": "text/xml" });
+          // twiml.message(`The item has been restocked to ${newStock} :) .`);
+          // req.res.end(twiml.toString());
+
+          req.res.end(`The offer has been restocked to ${newStock} :) `);
           return;
         }
       }
