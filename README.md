@@ -11,6 +11,7 @@ The project builds on the well-established bookshop scenario and improves the us
 - Install [git](https://nodejs.org/en/download) 
 - Sign up for a free [Twilio account](https://www.twilio.com/referral/iSDwWn) (no credit card needed)
 - Get a [Twilio phone number](https://www.youtube.com/watch?v=f9jE5ywz8cs) (the initial credits you get for free are sufficient to buy a number)
+- Install `ngrok` or a similar tool to tunnel a public URL to `localhost` (or you deploy the app to the cloud)
 - [Windows only] Install SQLite
 >  If you are running macOS or Linux, you will likely have SQLite installed. For Windows users, I recommend using the [Chocolatey](https://chocolatey.org/) package manager to install [sqlite](https://community.chocolatey.org/packages/SQLite) via `choco install sqlite`. After the installation, please check you can start the executable (`sqlite`) from the terminal.
 
@@ -39,6 +40,15 @@ The project builds on the well-established bookshop scenario and improves the us
     npm install
     npm start
     ```
+1. Start `ngrok`
+    ```sh
+    TODO
+    ```
+    > Alternatily, you can also deploy the app to the cloud and use the URL of the deployed app
+1. Set up the right webhook on icoming messages
+    ```sh
+    TODO
+    ```
 1. Trigger a request to order 40 books which results in a warning message to your phone number
     ```sh
     TODO
@@ -48,18 +58,8 @@ The project builds on the well-established bookshop scenario and improves the us
     TODO
     ```
 
-
-
-
-
-
 ## Known Issues
-If this weren't just a demo but a production app, it would make sense to:
-
-- Add proper state management to the application to save which book needs to be reordered instead of extracting this information from the initial text message.
-- Add a check in the webhook to make sure only POST [requests sent by Twilio are accepted](https://www.twilio.com/blog/how-to-secure-twilio-webhook-urls-in-nodejs).
-
-
+If this weren't just a demo but a production app, it would make sense to add proper state management to the application to save which book needs to be reordered instead of extracting this information from the initial text message.
 
 ## Get Support
 

@@ -62,12 +62,11 @@ class CatalogService extends cds.ApplicationService {
             stock: newStock,
           });
 
-          // const twiml = new MessagingResponse();
-          // req.res.writeHead(200, { "Content-Type": "text/xml" });
-          // twiml.message(`The item has been restocked to ${newStock} :) .`);
-          // req.res.end(twiml.toString());
+          const twiml = new MessagingResponse();
+          req.res.writeHead(200, { "Content-Type": "text/xml" });
+          twiml.message(`The item has been restocked to ${newStock} :) .`);
+          req.res.end(twiml.toString());
 
-          req.res.end(`The offer has been restocked to ${newStock} :) `);
           return;
         }
       }
