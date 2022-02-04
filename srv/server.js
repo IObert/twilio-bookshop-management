@@ -17,16 +17,18 @@ cds.on("bootstrap", (app) => {
       req.res.writeHead(200, { "Content-Type": "text/xml" });
 
       if (req.body.Body.includes("Yes")) {
-        const { book, restock } = await parse(req.body.From, req.body.Body);
-        if (book?.ID && book?.stock) {
-          const newStock = book.stock + restock;
-          await cds.update("Books").where({ ID: book.ID }).with({
+        const parsed = await collectBookDetails(req.body.From, req.body.Body);
+        if (parsed?.book?.ID && parsed?.book?.stock) {
+          const newStock = parsed?.book.stock + parsed.restock;
+          await cds.update("Books").where({ ID: parsed?.book.ID }).with({
             stock: newStock,
           });
 
-          twiml.message(`The item has been restocked to ${newStock} :) .`);
+          twiml.message(
+            `Great, your supplier 📦 has been contacted, and tomorrow there will be ${newStock} items in stock.`
+          );
         } else {
-          twiml.message("Oh no. Something went wrong :( .");
+          twiml.message("Oh no, something went wrong. 😣");
         }
       } else {
         twiml.message(
@@ -37,7 +39,7 @@ cds.on("bootstrap", (app) => {
     }
   );
 
-  async function parse(sender, message) {
+  async function collectBookDetails(sender, message) {
     const lastMessages = await twilioClient.messages.list({
       limit: 1,
       from: process.env.TWILIO_SENDER,
@@ -53,15 +55,21 @@ cds.on("bootstrap", (app) => {
       const restock = message.match(restockPattern)
         ? +message.match(restockPattern)[0]
         : undefined;
-      const lastOrder = +lastMessage.match(lastOrderPattern)[1];
-      const title = lastMessage.match(titlePattern)[1];
 
-      const books = await cds.read("Books").where({ title });
+      try {
+        const lastOrder = +lastMessage.match(lastOrderPattern)[1];
+        const title = lastMessage.match(titlePattern)[1];
+        const books = await cds.read("Books").where({ title });
 
-      return {
-        restock: restock || lastOrder,
-        book: books[0],
-      };
+        return {
+          restock: restock || lastOrder,
+          book: books[0],
+        };
+        
+      } catch (err) {
+        //regex didn't find a last order or book title
+        return {};
+      }
     }
   }
 });

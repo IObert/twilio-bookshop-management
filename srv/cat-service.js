@@ -19,7 +19,7 @@ class CatalogService extends cds.ApplicationService {
       if (remaining < 10) {
         twilioClient.messages
           .create({
-            body: `A customer just ordered ${stock}x "${title}" and there are only ${remaining} left in stock. Please respond with "Yes" if you would like to restock now.`,
+            body: `A customer just ordered ${quantity}x "${title}" and there are only ${remaining} left in stock. Please respond with "Yes" if you would like to restock now.`,
             from: process.env.TWILIO_SENDER,
             to: process.env.TWILIO_RECEIVER,
           })
