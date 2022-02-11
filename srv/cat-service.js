@@ -2,7 +2,6 @@ const cds = require("@sap/cds");
 const twilio = require("twilio");
 
 const twilioClient = twilio();
-const MessagingResponse = twilio.twiml.MessagingResponse;
 
 class CatalogService extends cds.ApplicationService {
   init() {
@@ -16,6 +15,8 @@ class CatalogService extends cds.ApplicationService {
       if (remaining < 0) {
         return req.reject(409, `${quantity} exceeds stock for book #${book}`);
       }
+      await UPDATE(Books, book).with({ stock: remaining });
+
       if (remaining < 10) {
         twilioClient.messages
           .create({
@@ -28,53 +29,8 @@ class CatalogService extends cds.ApplicationService {
           )
           .catch((message) => console.error(message));
       }
-      await UPDATE(Books, book).with({ stock: remaining });
+
       return { ID: book, stock: remaining };
-    });
-
-    // Restock books that are low on supply
-    this.on("restock", async (req) => {
-      // retrieve sender and payload from incoming message
-      const sender = req.data.from,
-        payload = req.data.body;
-      // get last message that was sent to that number
-      const lastMessages = await twilioClient.messages.list({
-        limit: 1,
-        from: process.env.TWILIO_SENDER,
-        to: sender,
-      });
-      const lastMessage = lastMessages[0]?.body;
-
-      if (payload.includes("Yes") && lastMessage) {
-        const restockPattern = /\d+/;
-        const lastOrderPattern = /(\d+)x/;
-        const titlePattern = /"(.*?)"/;
-
-        const restock = payload.match(restockPattern)
-          ? +payload.match(restockPattern)[0]
-          : undefined;
-        const lastOrder = +lastMessage.match(lastOrderPattern)[1];
-        const title = lastMessage.match(titlePattern)[1];
-        const books = await SELECT.from(Books).where({ title });
-        if (books[0] && books[0].ID && books[0].stock) {
-          const newStock = books[0].stock + (restock || lastOrder);
-          await UPDATE(Books, books[0].ID).with({
-            stock: newStock,
-          });
-
-          const twiml = new MessagingResponse();
-          req.res.writeHead(200, { "Content-Type": "text/xml" });
-          twiml.message(`The item has been restocked to ${newStock} :) .`);
-          req.res.end(twiml.toString());
-
-          return;
-        }
-      }
-
-      const twiml = new MessagingResponse();
-      req.res.writeHead(200, { "Content-Type": "text/xml" });
-      twiml.message("Oh no. Something went wrong :( .");
-      req.res.end(twiml.toString());
     });
 
     return super.init();

@@ -2,16 +2,16 @@
   "name": "bookshop",
   "version": "1.0.0",
   "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
+  "repository": "https://github.com/IObert/Twilio-Bookshop-Management",
+  "license": "Apache-2.0",
   "private": true,
   "dependencies": {
     "@sap/cds": "^5",
     "express": "^4",
-    "twilio": "^3.73.1"
+    "twilio": "^3.74.0"
   },
   "devDependencies": {
-    "@sap/cds-dk": "^4.7.3",
+    "@sap/cds-dk": "^4.8.0",
     "sqlite3": "^5.0.2"
   },
   "scripts": {

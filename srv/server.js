@@ -7,6 +7,39 @@ const MessagingResponse = twilio.twiml.MessagingResponse;
 cds.on("bootstrap", (app) => {
   const twilioClient = twilio();
 
+  async function collectBookDetails(sender, message) {
+    const lastMessages = await twilioClient.messages.list({
+      limit: 1,
+      from: process.env.TWILIO_SENDER,
+      to: sender,
+    });
+    const lastMessage = lastMessages[0]?.body;
+
+    if (lastMessage) {
+      const restockPattern = /\d+/;
+      const lastOrderPattern = /(\d+)x/;
+      const titlePattern = /"(.*?)"/;
+
+      const restock = message.match(restockPattern)
+        ? +message.match(restockPattern)[0]
+        : undefined;
+
+      try {
+        const lastOrder = +lastMessage.match(lastOrderPattern)[1];
+        const title = lastMessage.match(titlePattern)[1];
+        const books = await cds.read("Books").where({ title });
+
+        return {
+          restock: restock || lastOrder,
+          book: books[0],
+        };
+      } catch (err) {
+        //regex didn't find a last order or book title
+        return {};
+      }
+    }
+  }
+
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.post(
@@ -38,40 +71,4 @@ cds.on("bootstrap", (app) => {
       res.end(twiml.toString());
     }
   );
-
-  async function collectBookDetails(sender, message) {
-    const lastMessages = await twilioClient.messages.list({
-      limit: 1,
-      from: process.env.TWILIO_SENDER,
-      to: sender,
-    });
-    const lastMessage = lastMessages[0]?.body;
-
-    if (lastMessage) {
-      const restockPattern = /\d+/;
-      const lastOrderPattern = /(\d+)x/;
-      const titlePattern = /"(.*?)"/;
-
-      const restock = message.match(restockPattern)
-        ? +message.match(restockPattern)[0]
-        : undefined;
-
-      try {
-        const lastOrder = +lastMessage.match(lastOrderPattern)[1];
-        const title = lastMessage.match(titlePattern)[1];
-        const books = await cds.read("Books").where({ title });
-
-        return {
-          restock: restock || lastOrder,
-          book: books[0],
-        };
-        
-      } catch (err) {
-        //regex didn't find a last order or book title
-        return {};
-      }
-    }
-  }
 });
-
-module.exports = cds.server;
