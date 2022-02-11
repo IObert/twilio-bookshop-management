@@ -2,7 +2,7 @@
   "name": "bookshop",
   "version": "1.0.0",
   "description": "A simple CAP project.",
-  "repository": "https://github.com/IObert/Twilio-Bookshop-Management",
+  "repository": "https://github.com/IObert/twilio-bookshop-management",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
