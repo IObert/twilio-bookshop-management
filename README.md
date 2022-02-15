@@ -1,7 +1,9 @@
 # Twilio Bookshop Management
-CAP Bookshop x Twilio Messaging
 
-> This sample project demonstrates how to combine the [Twilio Messaging API](https://www.twilio.com/messaging) with an application built with the [SAP Cloud Application Programming Model](https://cap.cloud.sap/docs/).
+> This sample project demonstrates how to combine the [Twilio Messaging API](https://www.twilio.com/messaging) with an application built with the [SAP Cloud Application Programming Model](https://cap.cloud.sap/docs/). Basic information about this project can be found in this repository. For more details, please refer to the [following blog post](https://www.twilio.com/blog/how-to-send-and-receive-sms-with-sap-cap-using-twilio).
+
+[![title image](./docs/title-image.png)](https://www.twilio.com/blog/how-to-send-and-receive-sms-with-sap-cap-using-twilio)
+
 
 The project builds on the well-established bookshop scenario and improves the user experience of the bookshop owner. Every time the stock of a particular book goes below a pre-defined threshold, a warning is sent to to a shop manager. If the manager then want to restock this item, they can simply reply to the text message to trigger that action. The Twilio platform will then invoke a webhook provided by this application to order more books.
 
@@ -35,8 +37,8 @@ Optional:
     {
         "TWILIO_ACCOUNT_SID": "ACXXXXXXX",
         "TWILIO_AUTH_TOKEN": "1acYYYYY",
-        "TWILIO_SENDER": "+1 860 0000000",
-        "TWILIO_RECEIVER": "+1 860 111111"
+        "TWILIO_SENDER": "+18600000000",
+        "TWILIO_RECEIVER": "+18600000000"
     }
     ```
 1. Install all dependencies and start the server
@@ -64,7 +66,6 @@ If this weren't just a demo but a production app, it would make sense to add pro
 
 Check out the relevant documentation at [twilio.com/docs/sms](https://www.twilio.com/docs/sms) and [cap.cloud.sap](https://cap.cloud.sap). <br>
 If you have a question, find a bug, or otherwise need support, please open an issue in this repository.
-
 
 ## License
 
