@@ -55,7 +55,8 @@ Optional:
 1. Go to the [Twilio Console](https://console.twilio.com/?frameUrl=/console) and navigate to your phone number. Add the HTTPS URL that the previous step printed with the `/twilioWebhook` suffix to the section “A message comes in”.
     ![webhook](./docs/webhook.png)
 1. Trigger a request to order 95 books which results in a warning message to your phone number
-    ![low-stock](./docs/low-stock.png)
+    ![low-stock-ide](./docs/low-stock1.png)
+    ![low-stock-phone](./docs/low-stock2.png)
 1. Let's give it a shot. Respond with "Yes, please order 100 additional books" to the message you received a few minutes ago. Now query the current stock info via the first HTTP request once more.
     ![restocked](./docs/restocked.png)
 
