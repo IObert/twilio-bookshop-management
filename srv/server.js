@@ -46,10 +46,10 @@ cds.on("bootstrap", (app) => {
     "/twilioWebhook",
     twilio.webhook({ validate: process.env.NODE_ENV === "production" }), // Don't validate in test mode
     async (req, res) => {
-      const twiml = new MessagingResponse();
       req.res.writeHead(200, { "Content-Type": "text/xml" });
+      const twiml = new MessagingResponse();
 
-      if (req.body.Body.includes("Yes")) {
+      if (req.body.Body.includes("Ja")) {
         const parsed = await collectBookDetails(req.body.From, req.body.Body);
         if (parsed?.book?.ID && parsed?.book?.stock) {
           const newStock = parsed?.book.stock + parsed.restock;
@@ -58,14 +58,14 @@ cds.on("bootstrap", (app) => {
           });
 
           twiml.message(
-            `Great, your supplier 📦 has been contacted, and tomorrow there will be ${newStock} items in stock.`
+            `Erledigt ✅, dein Lieferant wurde kontaktiert und ab morgen sind ${newStock} Exemplare auf Lager.`
           );
         } else {
-          twiml.message("Oh no, something went wrong. 😣");
+          twiml.message("Oh nein, etwas ging schief. 😣");
         }
       } else {
         twiml.message(
-          `I'm sorry, I don't understand that reply. Please answer with "Yes" or "Yes, order 60 additional book."`
+          `Entschuldige, I kann diese Antwort leider nicht verstehen. Du kannst beispielsweise mit "Ja" oder "Ja, bestelle 60 zusätzliche Bücher" antworten.`
         );
       }
       res.end(twiml.toString());

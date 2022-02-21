@@ -11,7 +11,7 @@
     "twilio": "^3.74.0"
   },
   "devDependencies": {
-    "@sap/cds-dk": "^4.8.0",
+    "@sap/cds-dk": "^4.8.1",
     "sqlite3": "^5.0.2"
   },
   "scripts": {

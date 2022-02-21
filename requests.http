@@ -1,17 +1,17 @@
-### Get stock data from the catalog
+### Bestandsabfrage des Katalogs
 GET http://localhost:4004/catalog/Books
 
-### Submit an order
+### Sende eine Bestellung
 POST http://localhost:4004/catalog/submitOrder HTTP/1.1
 Content-Type: application/json
-
+ 
 {
-    "book": 1,
-    "quantity": 95
+   "book": 1,
+   "quantity": 95
 }
 
-### Test endpoint to restock books
+### Teste den Webhook um Bücher nachzubestellen
 POST http://localhost:4004/twilioWebhook HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
-
-Body=Yes 400&From=%2b4915161873292
+ 
+Body=Yes 400&From=%2b49151000000
