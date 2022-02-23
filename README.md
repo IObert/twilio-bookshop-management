@@ -1,8 +1,8 @@
 # Twilio Bookshop Management
 
-> This sample project demonstrates how to combine the [Twilio Messaging API](https://www.twilio.com/messaging) with an application built with the [SAP Cloud Application Programming Model](https://cap.cloud.sap/docs/). Basic information about this project can be found in this repository. For more details, please refer to the [following blog post](https://www.twilio.com/blog/how-to-send-and-receive-sms-with-sap-cap-using-twilio).
+> This sample project demonstrates how to combine the [Twilio Messaging API](https://www.twilio.com/messaging) with an application built with the [SAP Cloud Application Programming Model](https://cap.cloud.sap/docs/). Basic information about this project can be found in this repository. For more details, please refer to the [following blog post](https://www.twilio.com/blog/sende-und-empfange-sms-mit-twilio-und-dem-sap-cloud-application-programming-model).
 
-[![title image](./docs/title-image.png)](https://www.twilio.com/blog/how-to-send-and-receive-sms-with-sap-cap-using-twilio)
+[![title image](./docs/title-image.png)](https://www.twilio.com/blog/sende-und-empfange-sms-mit-twilio-und-dem-sap-cloud-application-programming-model)
 
 
 The project builds on the well-established bookshop scenario and improves the user experience of the bookshop owner. Every time the stock of a particular book goes below a pre-defined threshold, a warning is sent to to a shop manager. If the manager then want to restock this item, they can simply reply to the text message to trigger that action. The Twilio platform will then invoke a webhook provided by this application to order more books.
