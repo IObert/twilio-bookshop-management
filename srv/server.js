@@ -48,6 +48,7 @@ cds.on("bootstrap", (app) => {
     async (req, res) => {
       const twiml = new MessagingResponse();
       req.res.writeHead(200, { "Content-Type": "text/xml" });
+      console.log(`Received message ${req.body.SmsMessageSid}.`)
 
       if (req.body.Body.includes("Yes")) {
         const parsed = await collectBookDetails(req.body.From, req.body.Body);
